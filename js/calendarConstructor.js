@@ -808,8 +808,11 @@ function SwiftCal() {
 		calendarUniqueId = rand();
 		calendar = document.createElement('div');
 		calendar.classList.add('calendar');
-
-		document.querySelector(parentDiv).appendChild(calendar);
+		if(typeof parentDiv === 'string'){
+			document.querySelector(parentDiv).appendChild(calendar);
+		}else{
+			parentDiv.appendChild(calendar);
+		}
     calendar.id = 'calendar' + calendarUniqueId;
 
 		if (displayTime === true) {
