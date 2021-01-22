@@ -17,7 +17,7 @@ function SwiftCal() {
 		clickCount = 1,
 		displayTimeG = false,
 		inst = 0;
-	times = {
+		times = {
 			indexes: [],
 			values: []
 		},
@@ -727,6 +727,29 @@ function SwiftCal() {
 			generateTimesOnly(times.values, calendar.querySelector("[id='" + dayInPoint + "']"));
 		}
 	}
+
+	function randomBytes(length){
+    let array = new Uint32Array(length);
+    window.crypto.getRandomValues(array);
+    let st = ''
+    for (let i = 0; i < array.length; i++) {
+      st += array[i]
+      if(i === array.length-1){
+        return st;
+      }
+    }
+  }
+
+	function rand(){
+		let rand = randomBytes(10);
+		if(document.querySelector('calendar' + rand)){
+			rand();
+		}
+		else{
+			return rand;
+		}
+	};
+
 	this.collectEndUserSelection = function() {
 		return endUserSelection;
 	};
@@ -773,11 +796,22 @@ function SwiftCal() {
 	 * @param {?string[]} n endUserDurationChoice Array, loads dates provided by an end user.
 	 * @param {?boolean} backend Boolean Makes available backend functionality.
 	 */
-	this.calendar = function makeCalendar(parentDiv, preloadedDates, numberOfMonthsToDisplay, displayTime, endUser, endUserDurationChoice, backend) {
+	this.calendar = function makeCalendar(
+		parentDiv,
+		preloadedDates,
+		numberOfMonthsToDisplay,
+		displayTime,
+		endUser,
+		endUserDurationChoice,
+		backend) {
 		//Calendar is defined globally within the constructor
+		calendarUniqueId = rand();
 		calendar = document.createElement('div');
 		calendar.classList.add('calendar');
-		document.getElementById(parentDiv).appendChild(calendar);
+
+		document.querySelector(parentDiv).appendChild(calendar);
+    calendar.id = 'calendar' + calendarUniqueId;
+
 		if (displayTime === true) {
 			displayTimeG = true;
 			makeTimeElements(calendar);
@@ -809,12 +843,12 @@ function SwiftCal() {
 						toggleDuration(elem.id, min, max);
 						adjustPosition('durationChooser', calendar);
 						document.addEventListener('click', function(event) {
-							var isClickInside = document.getElementById('durationInput').contains(event.target);
+							var isClickInside = document.getElementById('durationInput' + calendarUniqueId).contains(event.target);
 							if (isClickInside) {
 								saveClientDateDuration();
 							}
-							if (!isClickInside && event.target === document.getElementById('durationChooserModal')) {
-								document.getElementById('durationChooserModal').style.display = 'none';
+							if (!isClickInside && event.target === document.getElementById('durationChooserModal' + calendarUniqueId)) {
+								document.getElementById('durationChooserModal' + calendarUniqueId).style.display = 'none';
 								saveClientDateDuration();
 							}
 						});
@@ -853,16 +887,16 @@ function SwiftCal() {
 		}
 
 		function toggleDuration(day, min, max) {
-			document.getElementById('durationInput').setAttribute('min', min);
-			document.getElementById('durationInput').setAttribute('max', max);
-			document.getElementById('durationInput').value = '1';
-			document.getElementById('durationChooserModal').style.height = calendar.clientHeight + "px";
-			document.getElementById('durationChooserModal').style.width = calendar.clientWidth + "px";
-			document.getElementById('durationChooserModal').style.display = 'inline';
+			document.getElementById('durationInput' + calendarUniqueId).setAttribute('min', min);
+			document.getElementById('durationInput' + calendarUniqueId).setAttribute('max', max);
+			document.getElementById('durationInput' + calendarUniqueId).value = '1';
+			document.getElementById('durationChooserModal' + calendarUniqueId).style.height = calendar.clientHeight + "px";
+			document.getElementById('durationChooserModal' + calendarUniqueId).style.width = calendar.clientWidth + "px";
+			document.getElementById('durationChooserModal' + calendarUniqueId).style.display = 'inline';
 		}
 
 		function saveClientDateDuration() {
-			var duration = document.getElementById('durationInput').value;
+			var duration = document.getElementById('durationInput' + calendarUniqueId).value;
 			endUserSelection[endUserSelection.length - 1].duration = duration;
 		}
 		//afterCalendarInit CALL swiftCal() range before instantiating the caledar
