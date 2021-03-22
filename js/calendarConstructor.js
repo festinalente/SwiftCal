@@ -353,7 +353,7 @@ function SwiftCal() {
 	 * @desctription Closes the time chooser modal then resets times
 	 */
 	function closeModal(e) {
-		var all = document.querySelector('#shopTimeTable').querySelectorAll('.dayTime');
+		var all = calendar.querySelectorAll('.dayTime');
 		all.forEach(function(e) {
 			if (e.style.backgroundColor === 'rgb(255, 204, 51)' && e.children.length === 0) {
 				e.click();
