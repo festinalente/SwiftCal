@@ -158,6 +158,9 @@ function SwiftCal() {
 					}
 				}
 			});
+
+			document.querySelectorAll('.month > .weekrow:nth-child(n+3)').style.minHeight = '90px';
+
 		} else {
 			return;
 		}
