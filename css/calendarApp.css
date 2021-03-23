@@ -220,6 +220,10 @@
   font-size: 0.9em;
 }
 
+.timeSelect > option {
+  color: #000;
+}
+
 .arrow-up {
   width: 0;
   height: 0;
