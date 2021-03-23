@@ -69,7 +69,7 @@
   margin-bottom: 0.2em;
 }
 
-.monthName{
+.monthName {
   margin: auto;
   text-align: center;
   font-family: Ubuntu;
@@ -95,7 +95,7 @@
   background-color: #ccc;
 }
 
-.month> * {
+.month > * {
   margin-left: 2px;
   margin-right: 2px;
 }
@@ -114,11 +114,11 @@
   margin-right: auto;
 }
 
-.timeContainer{
+.timeContainer {
   display: flex;
 }
 
-.timeChooserModal{
+.timeChooserModal {
   position: fixed;
   z-index: 1;
   width: 100%;
@@ -139,7 +139,7 @@
   margin: 1em 0 1em 0;
 }
 
-.deleteDiv{
+.deleteDiv {
   font-family: Ubuntu;
   font-size: 1.61em;
   background-color: #337ab7;
@@ -167,7 +167,7 @@
   justify-content: center;
 }
 
-.innerSpanDeleteBtn{
+.innerSpanDeleteBtn {
   text-align: center;
 }
 
@@ -221,6 +221,10 @@
 }
 
 .timeSelect > option {
+  color: #000;
+}
+
+.calendar p {
   color: #000;
 }
 
