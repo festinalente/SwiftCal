@@ -1,27 +1,42 @@
+/**
+  * SwiftCal -Calendar app.
+  * @class SwiftCal
+  */
 function SwiftCal() {
-	var disabled = false,
-		//things we use:
-		datesSelectedArrayObjects = [],
-		//dates chosen by end user (if any)
-		endUserSelection = [],
-		//simply tracks the above array:
-		endUserSelectionTrackingArray = [],
-		//strings, easier to compare:
-		datesSelectedArray = [],
-		selectRange,
-		keyDay,
-		calendar,
-		timeChooserModal,
-		saveAction,
-		timeChooser,
-		clickCount = 1,
-		displayTimeG = false,
-		inst = 0;
-		times = {
-			indexes: [],
-			values: []
-		},
-		time = {};
+	let disabled = false,
+				//things we use:
+				datesSelectedArrayObjects = [],
+				//dates chosen by end user (if any)
+				endUserSelection = [],
+				//simply tracks the above array:
+				endUserSelectionTrackingArray = [],
+				//strings, easier to compare:
+				datesSelectedArray = [],
+				selectRange,
+				keyDay,
+				calendar,
+				timeChooserModal,
+				saveAction,
+				singleDaySelect,
+				timeChooser,
+
+				jsonldFriendlyTimes = {},
+				//parentEl,
+
+				clickCount = 1,
+				displayTimeG = false,
+
+				//multipleRanges = [],
+				//activateMultipleRanges,
+				//question,
+				//questionAnswers = [],
+
+				inst = 0,
+				times = {
+					indexes: [],
+					values: []
+				},
+				time = {};
 	//var preloadedDates = [{"day":"2018-11-28"},{"day":"2018-11-29"}];
 	//TODO hook in save action on sensible events.
 	//TODO auto order times chronologicaly
@@ -343,6 +358,9 @@ function SwiftCal() {
 				var day = document.getElementById(e.id);
 				bookDay(day, e.id);
 				addTimeDisplay(e.id);
+				let days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+				jsonldFriendlyTimes[days[parseInt(weekday-1)]] = JSON.parse( JSON.stringify( times.values ) );
+				//?:
 				if (i === blockTheseDays.length - 1) {}
 			}
 		});
@@ -568,6 +586,7 @@ function SwiftCal() {
 	function innerComponents() {
 		//If the current elements aren't filled:
 		if (calendar.querySelectorAll('.timePickerContainer').length * 2 !== times.values.length) {
+			gthing = calendar;
 			if (swiftmoAlert) {
 				swiftmoAlert.setContent('Fill in the current time values before adding another.').toggle();
 			} else {
@@ -764,6 +783,9 @@ function SwiftCal() {
 	this.showTimes = function() {
 		return times;
 	};
+	this.jsonldFriendlyTimes = function() {
+		return jsonldFriendlyTimes;
+	}
 	this.datesSelectedTracker = function() {
 		return datesSelectedArray;
 	};
