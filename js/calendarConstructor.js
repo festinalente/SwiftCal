@@ -751,14 +751,14 @@ function SwiftCal() {
 	};
 
 	//utility to return date in correct format
-	this.formatDate = function formatDate(d, offset)() {
-		let date = (d) ? new Date() : new Date(d);
+	this.formatDate = function formatDate(d, offset) {
+		let date = (d) ? new Date(d) : new Date();
 		let day = (offset) ? date.getDate() + offset : date.getDate();
 		let month = (date.getMonth() + 1);
 		let year = date.getFullYear();
 		let formated = `${year}-${month}-${day}`
 		return formated;
-	}
+	};
 
 	this.collectEndUserSelection = function() {
 		return endUserSelection;
