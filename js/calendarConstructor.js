@@ -827,6 +827,7 @@ function SwiftCal() {
 		selectRange = (displayBlocked) ? true : false;
 
 		function blockDaysNotOpen(datesOpen){
+			if(!datesOpen) return;
 			let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
 			let openDays = datesOpen.map((el)=>{return el.day});
 
