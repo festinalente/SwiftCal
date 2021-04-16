@@ -1,42 +1,27 @@
-/**
-  * SwiftCal -Calendar app.
-  * @class SwiftCal
-  */
 function SwiftCal() {
-	let disabled = false,
-				//things we use:
-				datesSelectedArrayObjects = [],
-				//dates chosen by end user (if any)
-				endUserSelection = [],
-				//simply tracks the above array:
-				endUserSelectionTrackingArray = [],
-				//strings, easier to compare:
-				datesSelectedArray = [],
-				selectRange,
-				keyDay,
-				calendar,
-				timeChooserModal,
-				saveAction,
-				singleDaySelect,
-				timeChooser,
-
-				jsonldFriendlyTimes = {},
-				//parentEl,
-
-				clickCount = 1,
-				displayTimeG = false,
-
-				//multipleRanges = [],
-				//activateMultipleRanges,
-				//question,
-				//questionAnswers = [],
-
-				inst = 0,
-				times = {
-					indexes: [],
-					values: []
-				},
-				time = {};
+	var disabled = false,
+		//things we use:
+		datesSelectedArrayObjects = [],
+		//dates chosen by end user (if any)
+		endUserSelection = [],
+		//simply tracks the above array:
+		endUserSelectionTrackingArray = [],
+		//strings, easier to compare:
+		datesSelectedArray = [],
+		selectRange,
+		keyDay,
+		calendar,
+		timeChooserModal,
+		saveAction,
+		timeChooser,
+		clickCount = 1,
+		displayTimeG = false,
+		inst = 0;
+		times = {
+			indexes: [],
+			values: []
+		},
+		time = {};
 	//var preloadedDates = [{"day":"2018-11-28"},{"day":"2018-11-29"}];
 	//TODO hook in save action on sensible events.
 	//TODO auto order times chronologicaly
@@ -158,11 +143,6 @@ function SwiftCal() {
 					}
 				}
 			});
-
-			document.querySelectorAll('.month > .weekrow:nth-child(n+3)').forEach((weekrow, i) => {
-				weekrow.style.minHeight = '90px';
-			});
-
 		} else {
 			return;
 		}
@@ -363,9 +343,6 @@ function SwiftCal() {
 				var day = document.getElementById(e.id);
 				bookDay(day, e.id);
 				addTimeDisplay(e.id);
-				let days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-				jsonldFriendlyTimes[days[parseInt(weekday-1)]] = JSON.parse( JSON.stringify( times.values ) );
-				//?:
 				if (i === blockTheseDays.length - 1) {}
 			}
 		});
@@ -376,7 +353,7 @@ function SwiftCal() {
 	 * @desctription Closes the time chooser modal then resets times
 	 */
 	function closeModal(e) {
-		var all = calendar.querySelectorAll('.dayTime');
+		var all = document.querySelector('#shopTimeTable').querySelectorAll('.dayTime');
 		all.forEach(function(e) {
 			if (e.style.backgroundColor === 'rgb(255, 204, 51)' && e.children.length === 0) {
 				e.click();
@@ -591,7 +568,6 @@ function SwiftCal() {
 	function innerComponents() {
 		//If the current elements aren't filled:
 		if (calendar.querySelectorAll('.timePickerContainer').length * 2 !== times.values.length) {
-			gthing = calendar;
 			if (swiftmoAlert) {
 				swiftmoAlert.setContent('Fill in the current time values before adding another.').toggle();
 			} else {
@@ -788,9 +764,6 @@ function SwiftCal() {
 	this.showTimes = function() {
 		return times;
 	};
-	this.jsonldFriendlyTimes = function() {
-		return jsonldFriendlyTimes;
-	}
 	this.datesSelectedTracker = function() {
 		return datesSelectedArray;
 	};
@@ -822,6 +795,7 @@ function SwiftCal() {
 	 * @param {?boolean} endUser Boolean, Limits function to an end user (i.e. client of a client)
 	 * @param {?string[]} n endUserDurationChoice Array, loads dates provided by an end user.
 	 * @param {?boolean} backend Boolean Makes available backend functionality.
+	 * @param {?boolean} displayBlocked Sets the select range option to true (can't be set via method because dates to block are added on instantiation -bug).
 	 */
 	this.calendar = function makeCalendar(
 		parentDiv,
@@ -830,11 +804,36 @@ function SwiftCal() {
 		displayTime,
 		endUser,
 		endUserDurationChoice,
-		backend) {
+		backend,
+		displayBlocked,
+		datesOpen
+		) {
 		//Calendar is defined globally within the constructor
 		calendarUniqueId = rand();
 		calendar = document.createElement('div');
 		calendar.classList.add('calendar');
+
+
+		selectRange = (displayBlocked) ? true : false;
+
+		function blockDaysNotOpen(datesOpen){
+			let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
+			let openDays = datesOpen.map((el)=>{return el.day});
+
+			for (var i = 0; i < allDays.length; i++) {
+				if(openDays.indexOf(allDays[i]) === -1){
+					let day = document.getElementById(allDays[i]);
+							day.classList.add('widthShape', 'filler');
+							day.style.backgroundColor = 'white';
+							day.title = 'Closed on this day';
+					let closed = document.createElement('p');
+							closed.classList.add('calendarTime');
+							closed.textContent = 'Closed';
+							day.appendChild(closed);
+				}
+			}
+		}
+
 		if(typeof parentDiv === 'string'){
 			document.querySelector(parentDiv).appendChild(calendar);
 		}else{
@@ -846,6 +845,7 @@ function SwiftCal() {
 			displayTimeG = true;
 			makeTimeElements(calendar);
 		}
+
 
 		function attach(elem) {
 			elem.addEventListener('click', function() {
@@ -944,6 +944,7 @@ function SwiftCal() {
 						datesSelectedArray.push(dates[i].day);
 						calendar.querySelector(dateId).style.backgroundColor = '#fc3';
 						calendar.querySelector(dateId).classList.add('available');
+
 						//endUser option with durations!
 						if (endUser === true) {
 							attach(calendar.querySelector(dateId));
@@ -1110,6 +1111,7 @@ function SwiftCal() {
 			}
 			if (i === numberOfMonthsToDisplay - 1) {
 				preloadDatesFn(calendar, preloadedDates);
+				blockDaysNotOpen(datesOpen);
 			}
 		}
 		return this;
