@@ -229,7 +229,7 @@ function SwiftCal() {
 		}
 		//if date isn't preselected:
 		if (datesSelectedArray.includes(date) === false) {
-			var makeTimeRuleGlobal = timeChooser.querySelector('.makeTimeRuleGlobal');
+			var makeTimeRuleGlobal = calendar.querySelector('.timeChooser').querySelector('.makeTimeRuleGlobal');
 			if (makeTimeRuleGlobal) {
 				if (makeTimeRuleGlobal.checked === true) {
 					bookDayOfWeekG(date, null);
