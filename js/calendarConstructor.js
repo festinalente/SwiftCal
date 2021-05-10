@@ -753,9 +753,9 @@ function SwiftCal() {
 	};
 
 	//utility to return date in correct format
-	this.formatDate = function formatDate(d, offset) {
+	this.formatDate = function formatDate(d) {
 		let date = (d) ? new Date(d) : new Date();
-		let day = (offset) ? date.getDate() + offset : date.getDate();
+		let day = date.getDate();
 		let month = (date.getMonth() + 1);
 		let year = date.getFullYear();
 		let formated = `${year}-${month}-${day}`
@@ -828,22 +828,27 @@ function SwiftCal() {
 
 		selectRange = (displayBlocked) ? true : false;
 
-		function blockDaysNotOpen(datesOpen){
-			if(!datesOpen) return;
-			let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
-			let openDays = datesOpen.map((el)=>{return el.day});
+		function blockDaysNotOpen(calendar, datesOpen){
+			if(calendar && datesOpen){
+				let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
+				let openDays = datesOpen.map((el)=>{return el.day});
 
-			for (var i = 0; i < allDays.length; i++) {
-				if(openDays.indexOf(allDays[i]) === -1){
-					let day = document.getElementById(allDays[i]);
-							day.classList.add('widthShape', 'filler');
-							day.style.backgroundColor = 'white';
-							day.title = 'Closed on this day';
-					let closed = document.createElement('p');
-							closed.classList.add('calendarTime');
-							closed.textContent = 'Closed';
-							day.appendChild(closed);
+				for (var i = 0; i < allDays.length; i++) {
+					if(openDays.indexOf(allDays[i]) === -1){
+						let day = calendar.querySelector(`[id="${allDays[i]}"]`);
+								day.classList.add('widthShape', 'filler');
+								day.style.backgroundColor = 'white';
+								day.title = 'Closed on this day';
+
+						let closed = document.createElement('p');
+								closed.classList.add('calendarTime');
+								closed.textContent = 'closed';
+
+						day.appendChild(closed);
+					}
 				}
+			}else{
+				return;
 			}
 		}
 
