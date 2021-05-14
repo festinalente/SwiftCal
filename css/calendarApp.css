@@ -6,6 +6,7 @@
   width: 100%;
   height: calc(3.6*8em);
   overflow-y: auto;
+  font-family: Palatino, Ubuntu;
 }
 
 .blocked {
@@ -44,7 +45,7 @@
 }
 
 .calendarTime {
-  font-size: 0.9em;
+  font-size: 0.8em;
   margin-top: 0em;
   line-height: 1;
   background-color: aliceblue;
