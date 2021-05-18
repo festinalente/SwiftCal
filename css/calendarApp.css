@@ -238,3 +238,6 @@
 
 .calendar .dayTime {
   cursor: pointer; }
+
+.calendar .dayTime > * {
+  pointer-events: none; }

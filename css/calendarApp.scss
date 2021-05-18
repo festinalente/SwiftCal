@@ -273,4 +273,8 @@
     cursor: pointer;
   }
 
+  .dayTime > * {
+    pointer-events: none;
+  }
+
 }
