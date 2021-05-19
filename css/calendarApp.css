@@ -5,71 +5,63 @@
   background-color: #f0f8ff00;
   width: 100%;
   height: calc(3.6*8em);
-  overflow-y: auto;
-}
+  overflow-y: auto; }
 
-.blocked {
-  background-color: #333;
-}
+.calendar .blocked {
+  background-color: #333; }
 
-.filler {
+.calendar .filler {
   pointer-events: none;
-  opacity: 0.3;
-}
+  opacity: 0.3; }
 
-.timeSelect{
+.calendar .timeSelect {
   padding: 0px;
   width: 3em;
-  margin: 0px;
-}
+  margin: 0px; }
 
-.timeSelect > {
-  float: right
-}
+.calendar .timeSelect > {
+  float: right; }
 
-.timeCont{
+.calendar .timeCont {
   margin-left: auto;
   width: 10em;
   background-color: aliceblue;
   border-style: solid;
   border-color: #f15925;
   margin-right: auto;
-  margin-top: 10em;
-}
+  margin-top: 10em; }
 
-.dayblockrow {
+.calendar .dayblockrow {
   display: flex;
   flex-direction: row;
   min-width: 100%;
-}
+  background-color: aliceblue; }
 
-.calendarTime {
+.calendar .calendarTime {
   font-size: 0.9em;
   margin-top: 0em;
   line-height: 1;
   background-color: aliceblue;
+  color: black;
   text-align: center;
   margin-left: 0.2em;
-  margin-right: 0.2em;
-}
+  margin-right: 0.2em; }
 
-.widthShapeDays{
+.calendar .widthShapeDays {
   width: calc(100%/7);
   margin-left: auto;
   margin-right: auto;
-  text-align: center;
-}
+  text-align: center; }
 
-.widthShape {
+.calendar .widthShape {
   width: calc(100%/7);
   margin-left: auto;
   margin-right: auto;
   text-align: center;
   min-height: 3.6em;
-  margin-bottom: 0.2em;
-}
+  margin-bottom: 0.2em; }
 
-.monthName {
+.calendar .monthName {
   margin: auto;
   text-align: center;
   font-family: Ubuntu;
@@ -77,69 +69,60 @@
   background-color: #337ab7;
   color: #ffcc33;
   flex-basis: 100%;
-  border-bottom-style: solid;
-}
+  border-bottom-style: solid; }
 
-.weekrow {
+.calendar .weekrow {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
   background-color: #fff;
-  font-family: "roboto", "arial";
-}
+  font-family: "roboto", "arial"; }
 
-.dayName {
+.calendar .dayName {
   color: black;
   font-family: "roboto", "arial";
   font-weight: 600;
-  background-color: #ccc;
-}
+  background-color: #ccc; }
 
-.month > * {
+.calendar .month > * {
   margin-left: 2px;
-  margin-right: 2px;
-}
+  margin-right: 2px; }
 
-.month {
+.calendar .month {
   width: 50%;
   min-width: 300px;
-  margin: auto;
-}
+  margin: auto; }
 
-.timeChooser {
+.calendar .timeChooser {
   width: 10em;
   position: static;
   background-color: aliceblue;
   margin-left: auto;
-  margin-right: auto;
-}
+  margin-right: auto; }
 
-.timeContainer {
-  display: flex;
-}
+.calendar .timeContainer {
+  display: flex; }
 
-.timeChooserModal {
+.calendar .timeChooserModal {
   position: fixed;
   z-index: 1;
   width: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
+  background-color: black;
+  background-color: rgba(0, 0, 0, 0.4);
   display: none;
-  position: absolute;
-}
+  position: absolute; }
 
-.calendarLabel {
+.calendar .calendarLabel {
   min-width: 3em;
   padding: 0em 1em 0em 1em;
   color: black;
   font-family: "roboto", "arial";
   font-weight: 600;
   background-color: #ccc;
-  margin: 1em 0 1em 0;
-}
+  margin: 1em 0 1em 0; }
 
-.deleteDiv {
+.calendar .deleteDiv {
   font-family: Ubuntu;
   font-size: 1.61em;
   background-color: #337ab7;
@@ -148,10 +131,9 @@
   height: 2em;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
+  justify-content: center; }
 
-.deleteButton {
+.calendar .deleteButton {
   background-color: white;
   color: #f15925;
   float: right;
@@ -164,41 +146,35 @@
   width: 30px;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
+  justify-content: center; }
 
-.innerSpanDeleteBtn {
-  text-align: center;
-}
+.calendar .innerSpanDeleteBtn {
+  text-align: center; }
 
-.deleteButton:hover,
-.deleteButton:focus,
-.timeSelect:hover,
-.timeSelect:focus{
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-}
+.calendar .deleteButton:hover,
+.calendar .deleteButton:focus,
+.calendar .timeSelect:hover,
+.calendar .timeSelect:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer; }
 
-.hour{
+.calendar .hour {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 10em;
-}
+  width: 10em; }
 
-.timeSelectP {
+.calendar .timeSelectP {
   display: inline;
   width: 5em;
-  color: #000;
-}
+  color: #000; }
 
-.timeChooser > input[type=checkbox]{
+.calendar .timeChooser > input[type=checkbox] {
   outline: #f15925;
-  outline-style: solid;
-}
+  outline-style: solid; }
 
-.timeSelect {
+.calendar .timeSelect {
   padding: 0;
   width: 4em;
   margin: 0;
@@ -217,57 +193,51 @@
   border-width: 3px;
   border-color: #f15925;
   color: #000;
-  font-size: 0.9em;
-}
+  font-size: 0.9em; }
 
-.timeSelect > option {
-  color: #000;
-}
+.calendar .timeSelect > option {
+  color: #000; }
 
-.calendar p {
-  color: #000;
-}
+.calendar .calendar > p, .calendar h4, .calendar h3, .calendar h2, .calendar h1, .calendar select, .calendar option {
+  color: #000; }
 
-.arrow-up {
+.calendar .arrow-up {
   width: 0;
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 10px solid black;
-}
+  border-bottom: 10px solid black; }
 
-.arrow-down {
+.calendar .arrow-down {
   width: 0;
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-top: 10px solid #000;
-}
+  border-top: 10px solid #000; }
 
-.arrows {
+.calendar .arrows {
   float: right;
   clear: right;
   position: relative;
   cursor: pointer;
-  flex-direction: column;
-}
+  flex-direction: column; }
 
-.arrow-right {
+.calendar .arrow-right {
   width: 0;
   height: 0;
   border-top: 60px solid transparent;
   border-bottom: 60px solid transparent;
-  border-left: 60px solid green;
-}
+  border-left: 60px solid green; }
 
-.arrow-left {
+.calendar .arrow-left {
   width: 0;
   height: 0;
   border-top: 10px solid transparent;
   border-bottom: 10px solid transparent;
-  border-right:10px solid blue;
-}
+  border-right: 10px solid blue; }
 
-.dayTime {
-  cursor: pointer;
-}
+.calendar .dayTime {
+  cursor: pointer; }
+
+.calendar .dayTime > * {
+  pointer-events: none; }
