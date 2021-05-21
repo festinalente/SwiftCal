@@ -234,6 +234,7 @@ function SwiftCal() {
 					calendar.querySelector('.timeChooser').querySelector('.makeTimeRuleGlobal') : false;
 			if (makeTimeRuleGlobal) {
 				if (makeTimeRuleGlobal.checked === true) {
+					console.log(date);
 					bookDayOfWeekG(date, null);
 				}
 			}
@@ -338,6 +339,7 @@ function SwiftCal() {
 	 * @param inst number The instance if not using globally defined instance.
 	 */
 	function bookDayOfWeekG(dayId) {
+		console.log(dayId);
 		var weekday = document.getElementById(dayId).dataset.dayofweek;
 		var blockTheseDays = document.querySelectorAll("[data-dayofweek='" + weekday + "']");
 		blockTheseDays.forEach(function(e, i) {
