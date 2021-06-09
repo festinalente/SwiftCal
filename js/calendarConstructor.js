@@ -229,9 +229,12 @@ function SwiftCal() {
 		}
 		//if date isn't preselected:
 		if (datesSelectedArray.includes(date) === false) {
-			var makeTimeRuleGlobal = timeChooser.querySelector('.makeTimeRuleGlobal');
+
+			var makeTimeRuleGlobal = (calendar.querySelector('.timeChooser')) ?
+					calendar.querySelector('.timeChooser').querySelector('.makeTimeRuleGlobal') : false;
 			if (makeTimeRuleGlobal) {
 				if (makeTimeRuleGlobal.checked === true) {
+					console.log(date);
 					bookDayOfWeekG(date, null);
 				}
 			}
@@ -336,6 +339,7 @@ function SwiftCal() {
 	 * @param inst number The instance if not using globally defined instance.
 	 */
 	function bookDayOfWeekG(dayId) {
+		console.log(dayId);
 		var weekday = document.getElementById(dayId).dataset.dayofweek;
 		var blockTheseDays = document.querySelectorAll("[data-dayofweek='" + weekday + "']");
 		blockTheseDays.forEach(function(e, i) {
@@ -353,7 +357,7 @@ function SwiftCal() {
 	 * @desctription Closes the time chooser modal then resets times
 	 */
 	function closeModal(e) {
-		var all = document.querySelector('#shopTimeTable').querySelectorAll('.dayTime');
+		var all = calendar.querySelectorAll('.dayTime');
 		all.forEach(function(e) {
 			if (e.style.backgroundColor === 'rgb(255, 204, 51)' && e.children.length === 0) {
 				e.click();
@@ -750,6 +754,16 @@ function SwiftCal() {
 		}
 	};
 
+	//utility to return date in correct format
+	this.formatDate = function formatDate(d) {
+		let date = (d) ? new Date(d) : new Date();
+		let day = date.getDate();
+		let month = (date.getMonth() + 1);
+		let year = date.getFullYear();
+		let formated = `${year}-${month}-${day}`
+		return formated;
+	};
+
 	this.collectEndUserSelection = function() {
 		return endUserSelection;
 	};
@@ -816,6 +830,7 @@ function SwiftCal() {
 
 		selectRange = (displayBlocked) ? true : false;
 
+<<<<<<< HEAD
 		function blockDaysNotOpen(datesOpen){
 			if (!datesOpen) return;
 			let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
@@ -832,6 +847,29 @@ function SwiftCal() {
 							closed.textContent = 'Closed';
 							day.appendChild(closed);
 				}
+=======
+		function blockDaysNotOpen(calendar, datesOpen){
+			if(calendar && datesOpen){
+				let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
+				let openDays = datesOpen.map((el)=>{return el.day});
+
+				for (var i = 0; i < allDays.length; i++) {
+					if(openDays.indexOf(allDays[i]) === -1){
+						let day = calendar.querySelector(`[id="${allDays[i]}"]`);
+								day.classList.add('widthShape', 'filler');
+								day.style.backgroundColor = 'white';
+								day.title = 'Closed on this day';
+
+						let closed = document.createElement('p');
+								closed.classList.add('calendarTime');
+								closed.textContent = 'closed';
+
+						day.appendChild(closed);
+					}
+				}
+			}else{
+				return;
+>>>>>>> d73e9bc754ccff24c13571e2e42e486fad7c5e65
 			}
 		}
 
