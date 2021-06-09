@@ -795,6 +795,7 @@ function SwiftCal() {
 	 * @param {?boolean} endUser Boolean, Limits function to an end user (i.e. client of a client)
 	 * @param {?string[]} n endUserDurationChoice Array, loads dates provided by an end user.
 	 * @param {?boolean} backend Boolean Makes available backend functionality.
+	 * @param {?boolean} displayBlocked Sets the select range option to true (can't be set via method because dates to block are added on instantiation -bug).
 	 */
 	this.calendar = function makeCalendar(
 		parentDiv,
@@ -803,11 +804,37 @@ function SwiftCal() {
 		displayTime,
 		endUser,
 		endUserDurationChoice,
-		backend) {
+		backend,
+		displayBlocked,
+		datesOpen
+		) {
 		//Calendar is defined globally within the constructor
 		calendarUniqueId = rand();
 		calendar = document.createElement('div');
 		calendar.classList.add('calendar');
+
+
+		selectRange = (displayBlocked) ? true : false;
+
+		function blockDaysNotOpen(datesOpen){
+			if (!datesOpen) return;
+			let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
+			let openDays = datesOpen.map((el)=>{return el.day});
+
+			for (var i = 0; i < allDays.length; i++) {
+				if(openDays.indexOf(allDays[i]) === -1){
+					let day = document.getElementById(allDays[i]);
+							day.classList.add('widthShape', 'filler');
+							day.style.backgroundColor = 'white';
+							day.title = 'Closed on this day';
+					let closed = document.createElement('p');
+							closed.classList.add('calendarTime');
+							closed.textContent = 'Closed';
+							day.appendChild(closed);
+				}
+			}
+		}
+
 		if(typeof parentDiv === 'string'){
 			document.querySelector(parentDiv).appendChild(calendar);
 		}else{
@@ -819,6 +846,7 @@ function SwiftCal() {
 			displayTimeG = true;
 			makeTimeElements(calendar);
 		}
+
 
 		function attach(elem) {
 			elem.addEventListener('click', function() {
@@ -917,6 +945,7 @@ function SwiftCal() {
 						datesSelectedArray.push(dates[i].day);
 						calendar.querySelector(dateId).style.backgroundColor = '#fc3';
 						calendar.querySelector(dateId).classList.add('available');
+
 						//endUser option with durations!
 						if (endUser === true) {
 							attach(calendar.querySelector(dateId));
@@ -1083,6 +1112,7 @@ function SwiftCal() {
 			}
 			if (i === numberOfMonthsToDisplay - 1) {
 				preloadDatesFn(calendar, preloadedDates);
+				blockDaysNotOpen(datesOpen);
 			}
 		}
 		return this;
