@@ -830,7 +830,6 @@ function SwiftCal() {
 
 		selectRange = (displayBlocked) ? true : false;
 
-<<<<<<< HEAD
 		function blockDaysNotOpen(datesOpen){
 			if (!datesOpen) return;
 			let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
@@ -846,8 +845,8 @@ function SwiftCal() {
 							closed.classList.add('calendarTime');
 							closed.textContent = 'Closed';
 							day.appendChild(closed);
-				}
-=======
+				};
+				
 		function blockDaysNotOpen(calendar, datesOpen){
 			if(calendar && datesOpen){
 				let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
@@ -869,7 +868,6 @@ function SwiftCal() {
 				}
 			}else{
 				return;
->>>>>>> d73e9bc754ccff24c13571e2e42e486fad7c5e65
 			}
 		}
 
