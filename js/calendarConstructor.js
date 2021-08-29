@@ -771,32 +771,37 @@ function SwiftCal() {
 	this.setSaveAction = function(save) {
 		saveAction = save;
 		return this;
-	}
+	};
+
 	this.datesSelected = function() {
 		return datesSelectedArrayObjects;
 	};
+
 	this.showTimes = function() {
 		return times;
 	};
+
 	this.datesSelectedTracker = function() {
 		return datesSelectedArray;
 	};
+
 	this.clearSelection = function() {
 		return clearSelection;
 	};
+
 	this.disable = function() {
 			disabled = true;
 		},
-		/**
-		 * rangeOption - description
-		 *
-		 * @param  {type} boolean description
-		 * @return {type}         description
-		 */
-		this.range = function rangeOption(boolean) {
-			selectRange = boolean;
-			return this;
-		};
+	/**
+	 * rangeOption - description
+	 *
+	 * @param  {type} boolean description
+	 * @return {type}         description
+	 */
+	this.range = function rangeOption(boolean) {
+		selectRange = boolean;
+		return this;
+	};
 	/**
 	 * Make calendar
 	 * @function make Calendar
@@ -811,17 +816,8 @@ function SwiftCal() {
 	 * @param {?boolean} backend Boolean Makes available backend functionality.
 	 * @param {?boolean} displayBlocked Sets the select range option to true (can't be set via method because dates to block are added on instantiation -bug).
 	 */
-	this.calendar = function makeCalendar(
-		parentDiv,
-		preloadedDates,
-		numberOfMonthsToDisplay,
-		displayTime,
-		endUser,
-		endUserDurationChoice,
-		backend,
-		displayBlocked,
-		datesOpen
-		) {
+	this.calendar = function makeCalendar(parentDiv,preloadedDates,numberOfMonthsToDisplay,displayTime,
+		endUser,endUserDurationChoice,backend,displayBlocked,datesOpen) {
 		//Calendar is defined globally within the constructor
 		calendarUniqueId = rand();
 		calendar = document.createElement('div');
@@ -830,23 +826,6 @@ function SwiftCal() {
 
 		selectRange = (displayBlocked) ? true : false;
 
-		function blockDaysNotOpen(datesOpen){
-			if (!datesOpen) return;
-			let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
-			let openDays = datesOpen.map((el)=>{return el.day});
-
-			for (var i = 0; i < allDays.length; i++) {
-				if(openDays.indexOf(allDays[i]) === -1){
-					let day = document.getElementById(allDays[i]);
-							day.classList.add('widthShape', 'filler');
-							day.style.backgroundColor = 'white';
-							day.title = 'Closed on this day';
-					let closed = document.createElement('p');
-							closed.classList.add('calendarTime');
-							closed.textContent = 'Closed';
-							day.appendChild(closed);
-				};
-				
 		function blockDaysNotOpen(calendar, datesOpen){
 			if(calendar && datesOpen){
 				let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
@@ -876,13 +855,13 @@ function SwiftCal() {
 		}else{
 			parentDiv.appendChild(calendar);
 		}
+
     calendar.id = 'calendar' + calendarUniqueId;
 
 		if (displayTime === true) {
 			displayTimeG = true;
 			makeTimeElements(calendar);
 		}
-
 
 		function attach(elem) {
 			elem.addEventListener('click', function() {
@@ -1008,6 +987,7 @@ function SwiftCal() {
 				return;
 			}
 		}
+
 		if (numberOfMonthsToDisplay === undefined) {
 			numberOfMonthsToDisplay = 4;
 		}
@@ -1050,6 +1030,7 @@ function SwiftCal() {
 				}
 			}
 		}
+
 		var months = [];
 		var dateNow = new Date();
 		var monthNow = dateNow.getMonth();
@@ -1153,4 +1134,5 @@ function SwiftCal() {
 		}
 		return this;
 	};
+	
 }
