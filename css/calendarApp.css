@@ -37,13 +37,8 @@
   min-width: 100%;
   background-color: aliceblue; }
 
-<<<<<<< HEAD
-.calendarTime {
-  font-size: 0.8em;
-=======
 .calendar .calendarTime {
   font-size: 0.9em;
->>>>>>> d73e9bc754ccff24c13571e2e42e486fad7c5e65
   margin-top: 0em;
   line-height: 1;
   background-color: aliceblue;
