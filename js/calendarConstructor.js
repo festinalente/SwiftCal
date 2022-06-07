@@ -1,33 +1,35 @@
-function SwiftCal() {
-	var disabled = false,
-		//things we use:
-		datesSelectedArrayObjects = [],
-		//dates chosen by end user (if any)
-		endUserSelection = [],
-		//simply tracks the above array:
-		endUserSelectionTrackingArray = [],
-		//strings, easier to compare:
-		datesSelectedArray = [],
-		selectRange,
-		keyDay,
-		calendar,
-		timeChooserModal,
-		saveAction,
-		timeChooser,
-		clickCount = 1,
-		displayTimeG = false,
-		inst = 0;
-		times = {
-			indexes: [],
-			values: []
-		},
-		time = {};
-	//var preloadedDates = [{"day":"2018-11-28"},{"day":"2018-11-29"}];
-	//TODO hook in save action on sensible events.
-	//TODO auto order times chronologicaly
-	//TODO set in validator where start is less than end
-	//Set alerts?
-	/*Private Functions*/
+/* eslint no-tabs: ["error", { allowIndentationTabs: true }] */
+/* eslint indent: ["error", "tab"] */
+
+function SwiftCal () {
+	let disabled = false;
+	// things we use:
+	let datesSelectedArrayObjects = [];
+	// dates chosen by end user (if any)
+	const endUserSelection = [];
+	// simply tracks the above array:
+	const endUserSelectionTrackingArray = [];
+	// strings, easier to compare:
+	const datesSelectedArray = [];
+	let selectRange;
+	let keyDay;
+	let calendar;
+	let timeChooserModal;
+	let timeChooser;
+	let clickCount = 1;
+	let displayTimeG = false;
+	let inst = 0;
+	const times = {
+		indexes: [],
+		values: []
+	};
+	const time = {};
+	// var preloadedDates = [{"day":"2018-11-28"},{"day":"2018-11-29"}];
+	// TODO hook in save action on sensible events.
+	// TODO auto order times chronologicaly
+	// TODO set in validator where start is less than end
+	// Set alerts?
+	/* Private Functions */
 	/**
 	 * Book day
 	 * @description Books a day by adding it to the datesSelectedArray and it's tracking array.
@@ -35,7 +37,7 @@ function SwiftCal() {
 	 * @param day is a html div with an id that refers to the date YYYY-MM-DD months are counted from 0.
 	 * @param date is a string YYYY-MM-DD months are counted from 0.
 	 */
-	function bookDay(day, date) {
+	function bookDay (day, date) {
 		if (datesSelectedArray.includes(date) === false) {
 			day.style.backgroundColor = '#fc3';
 			datesSelectedArray.push(date);
@@ -52,13 +54,13 @@ function SwiftCal() {
 	 * @param day is a html div with an id that refers to the date YYYY-MM-DD months are counted from 0.
 	 * @param date is a string YYYY-MM-DD months are counted from 0.
 	 */
-	function releaseBookedDay(day, date) {
+	function releaseBookedDay (day, date) {
 		var index = datesSelectedArray.indexOf(date);
 		day.style.backgroundColor = '#fff';
 		datesSelectedArray.splice(1, index);
 		datesSelectedArrayObjects.splice(1, index);
 		if (day.children) {
-			for (i = day.children.length - 1; i >= 0; i--) {
+			for (let i = day.children.length - 1; i >= 0; i--) {
 				day.children[i].remove();
 			}
 		}
@@ -70,12 +72,12 @@ function SwiftCal() {
 	 * @todo allow range select to work with time values.
 	 * @fires bookDay for each day in a range
 	 */
-	function rangeSelect() {
+	function rangeSelect () {
 		var start = datesSelectedArrayObjects[0].day;
 		var end = datesSelectedArrayObjects[1].day;
 		var firstClicked = calendar.querySelector("[id='" + start + "']").dataset.dayindex;
 		var secondClicked = calendar.querySelector("[id='" + end + "']").dataset.dayindex;
-		var lowestVal = function() {
+		var lowestVal = function () {
 			if (firstClicked - secondClicked > 0) {
 				return [secondClicked, firstClicked];
 			} else {
@@ -85,12 +87,12 @@ function SwiftCal() {
 		var low = parseInt(lowestVal()[0]);
 		var high = parseInt(lowestVal()[1]);
 		for (var i = low; i <= high; i++) {
-			//best done via index as easilly itterable:
+			// best done via index as easilly itterable:
 			var day = calendar.querySelector('[data-dayindex = "' + i + '"]');
 			if (day.classList.contains('blocked')) {
-				//sets last clicked element to white if it falls beyond a blocked data
+				// sets last clicked element to white if it falls beyond a blocked data
 				calendar.querySelector("[id='" + end + "']").style.backgroundColor = 'white';
-				//removes it:
+				// removes it:
 				datesSelectedArray.splice(1, 1);
 				datesSelectedArrayObjects.splice(1, 1);
 				break;
@@ -99,7 +101,7 @@ function SwiftCal() {
 			var blockDay = calendar.querySelector("[id='" + date + "']");
 			bookDay(blockDay, date);
 			if (i === high) {
-				//Place the dates in order:
+				// Place the dates in order:
 				datesSelectedArray.push(datesSelectedArray.splice(1, 1)[0]);
 				datesSelectedArrayObjects.push(datesSelectedArrayObjects.splice(1, 1)[0]);
 			}
@@ -112,20 +114,20 @@ function SwiftCal() {
 	 * @param {?string[]} timeValues -An array of string representations of times ['09:00','12:00']
 	 * @param {!HTMLElement] dayInPoint
 	 */
-	function generateTimesOnly(timeValues, dayInPoint) {
+	function generateTimesOnly (timeValues, dayInPoint) {
 		var textinternal = '';
 		if (dayInPoint.children) {
-			for (i = dayInPoint.children.length - 1; i >= 0; i--) {
+			for (let i = dayInPoint.children.length - 1; i >= 0; i--) {
 				dayInPoint.children[i].remove();
 			}
 		}
 		if (timeValues && timeValues.length > 0) {
 			var ordered = sortTimes(timeValues);
 			var index = datesSelectedArray.indexOf(dayInPoint.id);
-			//Deep clone to remove original reference and create unique values:
+			// Deep clone to remove original reference and create unique values:
 			datesSelectedArrayObjects[index].times = JSON.parse(JSON.stringify(timeValues));
-			//add time values to calendar
-			ordered.forEach(function(e, i) {
+			// add time values to calendar
+			ordered.forEach(function (e, i) {
 				textinternal += e + ' ';
 				var time = document.createElement('p');
 				time.classList.add('calendarTime');
@@ -143,27 +145,25 @@ function SwiftCal() {
 					}
 				}
 			});
-		} else {
-			return;
 		}
 	}
 
-	function clearSelection() {
-		datesSelectedArrayObjects.forEach(function(e, i) {
+	function clearSelection () {
+		datesSelectedArrayObjects.forEach(function (e, i) {
 			document.getElementById(e.day).style.backgroundColor = '#fff';
 			datesSelectedArrayObjects.splice(1, i);
 			datesSelectedArray.splice(1, i);
 		});
 		return this;
-	};
+	}
 	/**
 	 * Release day of week
 	 * @function releaseDayOfWeekG
 	 * @param dayID id of the day to be released. N.b. day of week is stored as a data attribute
 	 * @todo make it use keyDay (which is the day in context)
 	 */
-	function releaseDayOfWeekG(dayId) {
-		//change dayId to key day
+	function releaseDayOfWeekG (dayId) {
+		// change dayId to key day
 		var weekday = keyDay.dataset.dayofweek;
 		var blockTheseDays = document.querySelectorAll("[data-dayofweek='" + weekday + "']");
 		for (var i = 0; i < blockTheseDays.length; i++) {
@@ -174,7 +174,7 @@ function SwiftCal() {
 			}
 			if (blockDay === keyDay) {
 				// remove only the display:
-				//removeTimeDisplay(blockTheseDays[i].id);
+				// removeTimeDisplay(blockTheseDays[i].id);
 			}
 		}
 	}
@@ -186,7 +186,7 @@ function SwiftCal() {
 	 * @fires adjustPosition()
 	 * @todo Write it so it selects elements by class and not by id. Remove ids completely actually. As in el.closest('#timeChooserModal');
 	 */
-	function dateOnClickEvents(e) {
+	function dateOnClickEvents (e) {
 		var el = e.target;
 		keyDay = el;
 		clickCount++;
@@ -200,15 +200,15 @@ function SwiftCal() {
 		var month = el.parentElement.parentElement.dataset.month;
 		var year = el.parentElement.parentElement.dataset.year;
 		var date = makeDate(year, month, day);
-		//no, go back
+		// no, go back
 		if (disabled === true) {
 			return;
 		}
-		//this deals only with ranges, if not returned the following code deals
-		//with individual days.
+		// this deals only with ranges, if not returned the following code deals
+		// with individual days.
 		if (selectRange === true) {
-			//multiple selections can be made by disabling this part of the code.
-			//n.b. originaly bug meant this evaluated as true.
+			// multiple selections can be made by disabling this part of the code.
+			// n.b. originaly bug meant this evaluated as true.
 			if (clickCount % 2 === 0) {
 				datesSelectedArray.length = 0;
 				datesSelectedArrayObjects.length = 0;
@@ -227,11 +227,10 @@ function SwiftCal() {
 			}
 			return;
 		}
-		//if date isn't preselected:
+		// if date isn't preselected:
 		if (datesSelectedArray.includes(date) === false) {
-
-			var makeTimeRuleGlobal = (calendar.querySelector('.timeChooser')) ?
-					calendar.querySelector('.timeChooser').querySelector('.makeTimeRuleGlobal') : false;
+			var makeTimeRuleGlobal = (calendar.querySelector('.timeChooser'))
+				? calendar.querySelector('.timeChooser').querySelector('.makeTimeRuleGlobal') : false;
 			if (makeTimeRuleGlobal) {
 				if (makeTimeRuleGlobal.checked === true) {
 					bookDayOfWeekG(date, null);
@@ -239,22 +238,22 @@ function SwiftCal() {
 			}
 			bookDay(el, date);
 			addTimeDisplay(date, null);
-			//display time picker
+			// display time picker
 			if (displayTimeG === true) {
-				timeChooserModal.style.height = calendar.clientHeight + "px";
-				timeChooserModal.style.width = calendar.clientWidth + "px";
+				timeChooserModal.style.height = calendar.clientHeight + 'px';
+				timeChooserModal.style.width = calendar.clientWidth + 'px';
 				timeChooserModal.style.display = 'inline';
 				adjustPosition(timeChooser, calendar);
 			}
 		} else {
-			//this all deletes a day selectiong: n.b. not in separate function like range
+			// this all deletes a day selectiong: n.b. not in separate function like range
 			// select which just reset the entire selection pertaining to it.
 			el.style.backgroundColor = 'white';
 			datesSelectedArray.splice(datesSelectedArray.indexOf(date), 1);
 			datesSelectedArrayObjects.splice(datesSelectedArray.indexOf(date), 1);
-			//removes any time divs on deselect
+			// removes any time divs on deselect
 			if (displayTimeG === true) {
-				//n.b. children used to refer to nodes only, not elements.
+				// n.b. children used to refer to nodes only, not elements.
 				while (el.children[0]) {
 					el.removeChild(el.children[0]);
 				}
@@ -275,7 +274,7 @@ function SwiftCal() {
 	 * @param  {!number} year  The corresponding year.
 	 * @return {number} Returns a number corresponding to the number of days for the date in point.
 	 */
-	var getDaysInMonth = function(month, year) {
+	var getDaysInMonth = function (month, year) {
 		return new Date(year, month, 0).getDate();
 	};
 	/**
@@ -298,7 +297,7 @@ function SwiftCal() {
 	 * @param day -2 digit day
 	 * @description returns a sting representation of a day e.g.: '2019-10-04'
 	 */
-	function makeDate(year, month, day) {
+	function makeDate (year, month, day) {
 		var date = year + '-' + month + '-' + day;
 		return date;
 	}
@@ -307,7 +306,7 @@ function SwiftCal() {
 	 * @param date -'2019-10-04'
 	 * @description Adds a 1 to the month in a date to make it comprehensible by humans.
 	 */
-	function humandate(date) {
+	function humandate (date) {
 		var humanDateSplit = date.split('-');
 		var humanDate = humanDateSplit[0] + '-' + (parseInt(humanDateSplit[1]) + 1) + '-' + humanDateSplit[2];
 		return humanDate;
@@ -321,15 +320,15 @@ function SwiftCal() {
 	 * @param fn The function you wish to be called on button click
 	 * @todo Make so various actions can be applied rather than just click.
 	 */
-	function makeButton(parent, id, character, title, fn) {
+	function makeButton (parent, id, character, title, fn) {
 		var base = document.createElement('p');
 		base.id = id;
 		base.textContent = character;
 		parent.appendChild(base);
-		base.title = title
+		base.title = title;
 		base.classList.add('deleteButton');
-		base.addEventListener('click', function(e) {
-			fn(e)
+		base.addEventListener('click', function (e) {
+			fn(e);
 		});
 	}
 	/** Block a particular day of the week (e.g. sabath)
@@ -337,10 +336,10 @@ function SwiftCal() {
 	 * @param string dayId The ID of the sample day e.g. '2019-12-10'
 	 * @param inst number The instance if not using globally defined instance.
 	 */
-	function bookDayOfWeekG(dayId) {
+	function bookDayOfWeekG (dayId) {
 		var weekday = document.getElementById(dayId).dataset.dayofweek;
 		var blockTheseDays = document.querySelectorAll("[data-dayofweek='" + weekday + "']");
-		blockTheseDays.forEach(function(e, i) {
+		blockTheseDays.forEach(function (e, i) {
 			if (e.classList.contains('filler') === false) {
 				var day = document.getElementById(e.id);
 				bookDay(day, e.id);
@@ -354,9 +353,9 @@ function SwiftCal() {
 	 * @funtion closeModal()
 	 * @desctription Closes the time chooser modal then resets times
 	 */
-	function closeModal(e) {
+	function closeModal (e) {
 		var all = calendar.querySelectorAll('.dayTime');
-		all.forEach(function(e) {
+		all.forEach(function (e) {
 			if (e.style.backgroundColor === 'rgb(255, 204, 51)' && e.children.length === 0) {
 				e.click();
 			}
@@ -365,14 +364,12 @@ function SwiftCal() {
 			if (swiftmoAlert) {
 				swiftmoAlert.setContent('Warning, you\'re missing an end time for the last time gap you entered.').toggle();
 			}
-			return;
 		} else if (times.values.length === 0) {
 			calendar.querySelector('.timeChooserModal').style.display = 'none';
 		} else if (timeValueInMill(times.values[times.values.length - 1]) < timeValueInMill(times.values[times.values.length - 2])) {
 			if (swiftmoAlert) {
 				swiftmoAlert.setContent('Warning, you\'ve entered an end time which is before the start time.').toggle();
 			}
-			return;
 		} else if (checkOverlap(times.values) === false) {
 			if (swiftmoAlert) {
 				swiftmoAlert.setContent('Warning, that time overlaps with other times you\'ve already selected.').toggle();
@@ -382,20 +379,20 @@ function SwiftCal() {
 		}
 	}
 
-	function timeValueInMill(time) {
+	function timeValueInMill (time) {
 		var br = time.split(':');
 		return parseInt(br[0]) * 60 * 60 * 1000 + parseInt(br[1]) * 60 * 1000;
 	}
 
-	function sortTimes(val) {
+	function sortTimes (val) {
 		var sorted = [];
 		return enumerate(val);
 
-		function sortNumber(a, b) {
+		function sortNumber (a, b) {
 			return a - b;
 		}
 
-		function enumerate(values) {
+		function enumerate (values) {
 			var numericalEquivalent = [];
 			for (var i = 0; i < values.length; i++) {
 				numericalEquivalent.push(timeValueInMill(values[i]));
@@ -405,7 +402,7 @@ function SwiftCal() {
 			}
 		}
 
-		function sort(values, numericalEquivalent) {
+		function sort (values, numericalEquivalent) {
 			var numericalEquivalentClone = JSON.parse(JSON.stringify(numericalEquivalent));
 			var sortedInt = numericalEquivalent.sort(sortNumber);
 			for (var p = 0; p < numericalEquivalentClone.length; p++) {
@@ -418,9 +415,9 @@ function SwiftCal() {
 		}
 	}
 
-	function checkOverlap(values) {
+	function checkOverlap (values) {
 		var numericalEquivalent = [];
-		var overlap = false;
+		// var overlap = false;
 		if (values.length % 2 === 0) {
 			for (var i = 0; i < values.length; i++) {
 				numericalEquivalent.push(timeValueInMill(values[i]));
@@ -431,7 +428,7 @@ function SwiftCal() {
 				var st = numericalEquivalent[ii];
 				var en = numericalEquivalent[ii + 1];
 				for (var h = 0; h < numericalEquivalent.length; h++) {
-					//don't compare to self
+					// don't compare to self
 					if (h % 2 === 0 && ii !== h) {
 						var st2 = numericalEquivalent[h];
 						var en2 = numericalEquivalent[h + 1];
@@ -452,13 +449,13 @@ function SwiftCal() {
 		}
 	}
 
-	function removeTimeDisplay(dayInPoint) {
+	function removeTimeDisplay (dayInPoint) {
 		if (!dayInPoint) {
 			dayInPoint = document.getElementById(datesSelectedArrayObjects[datesSelectedArrayObjects.length - 1].day);
 		} else {
 			dayInPoint = document.getElementById(dayInPoint);
 		}
-		for (i = dayInPoint.children.length; i >= 0; i--) {
+		for (let i = dayInPoint.children.length; i >= 0; i--) {
 			if (dayInPoint.children[i]) {
 				dayInPoint.children[i].remove();
 			}
@@ -469,8 +466,8 @@ function SwiftCal() {
 	 * @function removeTime()
 	 * @description removes the last time chooser and times made
 	 */
-	function removeTime() {
-		/*if there's more than one picker, this can be got several ways:
+	function removeTime () {
+		/* if there's more than one picker, this can be got several ways:
 		 * calendar.querySelectorAll('.timeChooser').length;
 		 * document.querySelector('#shopTimeTable').querySelectorAll('.timePickerContainer').length
 		 * removeOrRestTimePicker
@@ -478,54 +475,48 @@ function SwiftCal() {
 		var timeChooser = calendar.querySelector('.timeChooser');
 		var makeTimeRuleGlobal = timeChooser.querySelector('.makeTimeRuleGlobal');
 		var timePickerContainers = calendar.querySelectorAll('.timePickerContainer');
-		//remove one or two times depending:
+		// remove one or two times depending:
 		if (timePickerContainers.length >= 2) {
 			timeChooser.removeChild(timePickerContainers[timePickerContainers.length - 1]);
-			//remove times from the array
+			// remove times from the array
 			if (times.indexes.length % 2 === 0) {
 				times.indexes.splice(times.indexes.length - 2, 2);
 				times.values.splice(times.values.length - 2, 2);
-			}
-			//redundant?:
-			else {
+			} else {
 				times.indexes.splice(times.indexes.length - 1, 1);
 				times.values.splice(times.values.length - 1, 1);
 			}
 			generateTimesOnly(times.values, keyDay);
 		} else {
-			timeChooser.querySelectorAll('select').forEach(function(e) {
+			timeChooser.querySelectorAll('select').forEach(function (e) {
 				e.selectedIndex = 0;
 			});
-			//document.getElementsByClassName(times.indexes[i] + '-hh')[0].selectedIndex = 0;
-			//document.getElementsByClassName(times.indexes[i] + '-mm')[0].selectedIndex = 0;
+			// document.getElementsByClassName(times.indexes[i] + '-hh')[0].selectedIndex = 0;
+			// document.getElementsByClassName(times.indexes[i] + '-mm')[0].selectedIndex = 0;
 			if (times.indexes.length % 2 === 0) {
 				times.indexes.splice(times.indexes.length - 2, 2);
 				times.values.splice(times.values.length - 2, 2);
-			}
-			//redundant?:
-			else {
+			} else {
 				times.indexes.splice(times.indexes.length - 1, 1);
 				times.values.splice(times.values.length - 1, 1);
 			}
 			makeTimeRuleGlobal.checked = false;
-			generateTimesOnly(times.values, keyDay)
+			generateTimesOnly(times.values, keyDay);
 			if (calendar.querySelector(keyDay.id).children.length === 0) {
 				keyDay.click();
 			}
-			//releaseDayOfWeekG(keyDay.id);
-			//releaseBookedDay(keyDay, keyDay.id);
-			//generateTimesOnly(times.values, keyDay);
+			// releaseDayOfWeekG(keyDay.id);
+			// releaseBookedDay(keyDay, keyDay.id);
+			// generateTimesOnly(times.values, keyDay);
 		}
 		if (makeTimeRuleGlobal.checked === true) {
-			//makeTimeRuleGlobal.checked = false;
+			// makeTimeRuleGlobal.checked = false;
 			// resets all dates with the correct time
-			//releaseDayOfWeekG(keyDay.id);
+			// releaseDayOfWeekG(keyDay.id);
 			bookDayOfWeekG(keyDay.id, inst);
-		}
-		//just the key day:
-		else {
+		} else {
 			releaseDayOfWeekG(keyDay.id);
-		};
+		}
 	}
 	/**
 	 * Make time element
@@ -533,42 +524,40 @@ function SwiftCal() {
 	 * @param {HTMLElement} div
 	 * @returns A div in the modal with a time selector
 	 */
-	function makeTimeElements(calendar) {
-		//Base:
+	function makeTimeElements (calendar) {
+		// Base:
 		timeChooserModal = document.createElement('div');
 		timeChooserModal.classList.add('timeChooserModal');
-		//timeChooserModal.id = 'timeChooserModal';
+		// timeChooserModal.id = 'timeChooserModal';
 		calendar.appendChild(timeChooserModal);
 		var timeCont = document.createElement('div');
 		timeCont.classList.add('timeCont');
 		timeChooserModal.appendChild(timeCont);
-		timeChooserModal.addEventListener('click', function(e) {
-			if (e.target.classList.contains('timeChooserModal') === false) {
-				return;
-			} else {
+		timeChooserModal.addEventListener('click', function (e) {
+			if (e.target.classList.contains('timeChooserModal') === true) {
 				closeModal();
 			}
-		})
+		});
 		timeChooser = document.createElement('div');
 		timeChooser.classList.add('timeChooser');
 		timeCont.appendChild(timeChooser);
 		var deleteDiv = document.createElement('div');
 		deleteDiv.classList.add('deleteDiv');
-		//makeButton(parent, id, character, title, fn)
+		// makeButton(parent, id, character, title, fn)
 		makeButton(deleteDiv, 'addTime', '+', 'add a time', innerComponents);
 		makeButton(deleteDiv, 'removeTime', '-', 'remove last time', removeTime);
 		makeButton(deleteDiv, 'deleteButton', 'x', 'close', closeModal);
 		timeChooser.appendChild(deleteDiv);
 		return this;
-	};
-	//(makeTimeElements calls) -> (makebutton attaches closeModal
+	}
+	// (makeTimeElements calls) -> (makebutton attaches closeModal
 	/**
 	 * innerComponents - description
 	 *
 	 * @return {type}  description
 	 */
-	function innerComponents() {
-		//If the current elements aren't filled:
+	function innerComponents () {
+		// If the current elements aren't filled:
 		if (calendar.querySelectorAll('.timePickerContainer').length * 2 !== times.values.length) {
 			if (swiftmoAlert) {
 				swiftmoAlert.setContent('Fill in the current time values before adding another.').toggle();
@@ -591,17 +580,17 @@ function SwiftCal() {
 		inst++;
 	}
 
-	function scrollToTimePicker() {
+	function scrollToTimePicker () {
 		var nodes = document.querySelectorAll('.timePickerContainer');
 		nodes[nodes.length - 1].scrollIntoView({
-			behavior: "smooth",
-			block: "end",
-			inline: "nearest"
+			behavior: 'smooth',
+			block: 'end',
+			inline: 'nearest'
 		});
 	}
 
-	function dayText(textbefore, textafter, dow) {
-		//day of week
+	function dayText (textbefore, textafter, dow) {
+		// day of week
 		if (!dow) {
 			dow = parseInt(keyDay.dataset.dayofweek);
 		}
@@ -614,40 +603,39 @@ function SwiftCal() {
 	 * @param  {HTMLElement} timePickerContainer This is the HTML element to which the checkbox will be appended.
 	 * @return {HTMLElement} Returns a HTML checkbox to select all days of a particular type (e.g. all Mondays).
 	 */
-	function tickboxes(timePickerContainer) {
+	function tickboxes (timePickerContainer) {
 		var timeCont = timePickerContainer;
 		var labelfor = document.createElement('p');
 		var text = dayText('Set these times for all ', 'days');
 		if (inst === 0) {
 			labelfor.textContent = text;
 			labelfor.classList.add('timeSelectP', 'makeTimeRuleGlobalClass');
-			labelfor.htmlFor = 'makeTimeRuleGlobal'
+			labelfor.htmlFor = 'makeTimeRuleGlobal';
 			timeCont.appendChild(labelfor);
 			var makeTimeRuleGlobal = document.createElement('input');
 			makeTimeRuleGlobal.setAttribute('type', 'checkbox');
 			makeTimeRuleGlobal.name = 'makeTimeRuleGlobal';
 			makeTimeRuleGlobal.classList.add('makeTimeRuleGlobal');
 			timeCont.appendChild(makeTimeRuleGlobal);
-			makeTimeRuleGlobal.addEventListener('click', function(e) {
+			makeTimeRuleGlobal.addEventListener('click', function (e) {
 				if (makeTimeRuleGlobal.checked === false) {
 					releaseDayOfWeekG(keyDay.id);
 				} else {
 					bookDayOfWeekG(keyDay.id, inst);
 				}
 			});
-			scrollToTimePicker()
+			scrollToTimePicker();
 		} else {
 			labelfor.textContent = dayText('Set these times for all ', 'days');
-			scrollToTimePicker()
-			return;
+			scrollToTimePicker();
 		}
 	}
 
-	function maketime(startEnd, appendTo, instInternal) {
+	function maketime (startEnd, appendTo, instInternal) {
 		var startContainer = document.createElement('div');
 		startContainer.classList.add('timeContainer');
 		var startLabel = document.createElement('p');
-		//startLabel.setAttribute('for', startEnd+'Hour');
+		// startLabel.setAttribute('for', startEnd+'Hour');
 		startLabel.classList.add('timeSelectP');
 		startLabel.textContent = startEnd + ':';
 		startContainer.appendChild(startLabel);
@@ -663,7 +651,7 @@ function SwiftCal() {
 		appendTo.appendChild(startContainer);
 	}
 
-	function makeSelector(type, limit, id, parent, startEnd, instInternal) {
+	function makeSelector (type, limit, id, parent, startEnd, instInternal) {
 		time[type] = '00';
 		var h = document.createElement('select');
 		h.classList.add(type, id + '-' + type, 'timeSelect');
@@ -674,7 +662,7 @@ function SwiftCal() {
 		h.appendChild(placeholder);
 		while (i <= limit) {
 			var hour = document.createElement('option');
-			//leading zero on single digit numbers:
+			// leading zero on single digit numbers:
 			var text = i.toString();
 			if (text.length === 1) {
 				text = '0' + i;
@@ -684,7 +672,7 @@ function SwiftCal() {
 			h.appendChild(hour);
 			i++;
 		}
-		h.addEventListener('click', function() {
+		h.addEventListener('click', function () {
 			time[type] = h.value;
 			if (type === 'hh') {
 				time.mm = '00';
@@ -702,22 +690,22 @@ function SwiftCal() {
 		parent.appendChild(h);
 	}
 
-	function adjustPosition(element, targetCalendar) {
-		//position Time picker:
+	function adjustPosition (element, targetCalendar) {
+		// position Time picker:
 		var calCoordinates = targetCalendar.getBoundingClientRect();
 		var x = calCoordinates.x;
 		var y = calCoordinates.y;
 		var calWidth = calCoordinates.width;
 		var timeChooserCoordinates = element.getBoundingClientRect();
 		var tWidth = timeChooserCoordinates.width;
-		//var topCo = y + 50;
+		// var topCo = y + 50;
 		var topCo = y + 10;
 		var leftCo = x + ((calWidth - tWidth) / 2);
-		element.style.top = topCo + "px";
-		element.style.left = leftCo + "px";
+		element.style.top = topCo + 'px';
+		element.style.left = leftCo + 'px';
 	}
 
-	function addTimeDisplay(dayInPoint) {
+	function addTimeDisplay (dayInPoint) {
 		if (dayInPoint === null) {
 			if (calendar.querySelector('.makeTimeRuleGlobal').checked === true) {
 				bookDayOfWeekG(keyDay.id);
@@ -730,71 +718,70 @@ function SwiftCal() {
 		}
 	}
 
-	function randomBytes(length){
-    let array = new Uint32Array(length);
-    window.crypto.getRandomValues(array);
-    let st = ''
-    for (let i = 0; i < array.length; i++) {
-      st += array[i]
-      if(i === array.length-1){
-        return st;
-      }
-    }
-  }
-
-	function rand(){
-		let rand = randomBytes(10);
-		if(document.querySelector('calendar' + rand)){
-			rand();
+	function randomBytes (length) {
+		const ar = new Uint32Array(length);
+		window.crypto.getRandomValues(ar);
+		let st = '';
+		for (let i = 0; i < ar.length; i++) {
+			st += ar[i];
+			if (i === ar.length - 1) {
+				return st;
+			}
 		}
-		else{
+	}
+
+	function rand () {
+		const rand = randomBytes(10);
+		if (document.querySelector('calendar' + rand)) {
+			rand();
+		} else {
 			return rand;
 		}
-	};
+	}
 
-	//utility to return date in correct format
-	this.formatDate = function formatDate(d) {
-		let date = (d) ? new Date(d) : new Date();
-		let day = date.getDate();
-		let month = (date.getMonth() + 1);
-		let year = date.getFullYear();
-		let formated = `${year}-${month}-${day}`
+	// utility to return date in correct format
+	this.formatDate = function formatDate (d) {
+		const date = (d) ? new Date(d) : new Date();
+		const day = date.getDate();
+		const month = (date.getMonth() + 1);
+		const year = date.getFullYear();
+		const formated = `${year}-${month}-${day}`;
 		return formated;
 	};
 
-	this.collectEndUserSelection = function() {
+	this.collectEndUserSelection = function () {
 		return endUserSelection;
 	};
-	//if set runs a function everytime a time is selected, or dates added via day of week or when the timepicker is closed:
-	this.setSaveAction = function(save) {
+	// if set runs a function everytime a time is selected, or dates added via day of week or when the timepicker is closed:
+	this.setSaveAction = function (save) {
 		saveAction = save;
 		return this;
-	}
-	this.datesSelected = function() {
+	};
+	this.datesSelected = function () {
 		return datesSelectedArrayObjects;
 	};
-	this.showTimes = function() {
+	this.showTimes = function () {
 		return times;
 	};
-	this.datesSelectedTracker = function() {
+	this.datesSelectedTracker = function () {
 		return datesSelectedArray;
 	};
-	this.clearSelection = function() {
+	this.clearSelection = function () {
 		return clearSelection;
 	};
-	this.disable = function() {
-			disabled = true;
-		},
-		/**
-		 * rangeOption - description
-		 *
-		 * @param  {type} boolean description
-		 * @return {type}         description
-		 */
-		this.range = function rangeOption(boolean) {
-			selectRange = boolean;
-			return this;
-		};
+	this.disable = function () {
+		disabled = true;
+	};
+	/**
+	 * rangeOption - description
+	 *
+	 * @param  {type} boolean description
+	 * @return {type}         description
+	 */
+	this.range = function rangeOption (boolean) {
+		selectRange = boolean;
+		return this;
+	};
 	/**
 	 * Make calendar
 	 * @function make Calendar
@@ -809,7 +796,7 @@ function SwiftCal() {
 	 * @param {?boolean} backend Boolean Makes available backend functionality.
 	 * @param {?boolean} displayBlocked Sets the select range option to true (can't be set via method because dates to block are added on instantiation -bug).
 	 */
-	this.calendar = function makeCalendar(
+	this.calendar = function makeCalendar (
 		parentDiv,
 		preloadedDates,
 		numberOfMonthsToDisplay,
@@ -819,54 +806,46 @@ function SwiftCal() {
 		backend,
 		displayBlocked,
 		datesOpen
-		) {
-		//Calendar is defined globally within the constructor
-		calendarUniqueId = rand();
+	) {
+		// Calendar is defined globally within the constructor
+		const calendarUniqueId = rand();
 		calendar = document.createElement('div');
 		calendar.classList.add('calendar');
-
-
 		selectRange = (displayBlocked) ? true : false;
 
-		function blockDaysNotOpen(calendar, datesOpen){
-			if(calendar && datesOpen){
-				let allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el)=>{return el.id});
-				let openDays = datesOpen.map((el)=>{return el.day});
+		function blockDaysNotOpen (datesOpen) {
+			if (!datesOpen) return;
+			const allDays = Array.from(calendar.querySelectorAll('.dayTime')).map((el) => { return el.id; });
+			const openDays = datesOpen.map((el) => { return el.day; });
 
-				for (var i = 0; i < allDays.length; i++) {
-					if(openDays.indexOf(allDays[i]) === -1){
-						let day = calendar.querySelector(`[id="${allDays[i]}"]`);
-								day.classList.add('widthShape', 'filler');
-								day.style.backgroundColor = 'white';
-								day.title = 'Closed on this day';
-
-						let closed = document.createElement('p');
-								closed.classList.add('calendarTime');
-								closed.textContent = 'closed';
-
-						day.appendChild(closed);
-					}
+			for (let i = 0; i < allDays.length; i++) {
+				if (openDays.indexOf(allDays[i]) === -1) {
+					const day = document.getElementById(allDays[i]);
+					day.classList.add('widthShape', 'filler');
+					day.style.backgroundColor = 'white';
+					day.title = 'Closed on this day';
+					const closed = document.createElement('p');
+					closed.classList.add('calendarTime');
+					closed.textContent = 'Closed';
+					day.appendChild(closed);
 				}
-			}else{
-				return;
 			}
 		}
 
-		if(typeof parentDiv === 'string'){
+		if (typeof parentDiv === 'string') {
 			document.querySelector(parentDiv).appendChild(calendar);
-		}else{
+		} else {
 			parentDiv.appendChild(calendar);
 		}
-    calendar.id = 'calendar' + calendarUniqueId;
+		calendar.id = 'calendar' + calendarUniqueId;
 
 		if (displayTime === true) {
 			displayTimeG = true;
 			makeTimeElements(calendar);
 		}
 
-
-		function attach(elem) {
-			elem.addEventListener('click', function() {
+		function attach (elem) {
+			elem.addEventListener('click', function () {
 				if (endUserSelectionTrackingArray.includes(elem.id)) {
 					elem.style.borderStyle = 'none';
 					endUserSelection.splice(endUserSelectionTrackingArray.indexOf(elem.id), 1);
@@ -875,7 +854,7 @@ function SwiftCal() {
 					elem.style.borderStyle = 'solid';
 					elem.style.borderColor = 'blue';
 					var timeConstraint = elem.children[0].textContent.split(' ');
-					//min should be user defined by the guide in a data attribute:
+					// min should be user defined by the guide in a data attribute:
 					var min = 1;
 					var max = parseInt(timeConstraint[1]) - parseInt(timeConstraint[0]);
 					var times = document.getElementById(elem.id).firstChild.nextSibling.textContent;
@@ -886,11 +865,11 @@ function SwiftCal() {
 						humanDate: humandate(elem.id)
 					});
 					endUserSelectionTrackingArray.push(elem.id);
-					//toggle duration
+					// toggle duration
 					if (endUser === true && endUserDurationChoice === true) {
 						toggleDuration(elem.id, min, max);
 						adjustPosition('durationChooser', calendar);
-						document.addEventListener('click', function(event) {
+						document.addEventListener('click', function (event) {
 							var isClickInside = document.getElementById('durationInput' + calendarUniqueId).contains(event.target);
 							if (isClickInside) {
 								saveClientDateDuration();
@@ -905,7 +884,7 @@ function SwiftCal() {
 			});
 		}
 
-		function durationChooser() {
+		function durationChooser () {
 			var modal = document.createElement('div');
 			modal.classList.add('timeChooserModal');
 			modal.id = 'durationChooserModal';
@@ -934,39 +913,39 @@ function SwiftCal() {
 			durationChooser.appendChild(Container);
 		}
 
-		function toggleDuration(day, min, max) {
+		function toggleDuration (day, min, max) {
 			document.getElementById('durationInput' + calendarUniqueId).setAttribute('min', min);
 			document.getElementById('durationInput' + calendarUniqueId).setAttribute('max', max);
 			document.getElementById('durationInput' + calendarUniqueId).value = '1';
-			document.getElementById('durationChooserModal' + calendarUniqueId).style.height = calendar.clientHeight + "px";
-			document.getElementById('durationChooserModal' + calendarUniqueId).style.width = calendar.clientWidth + "px";
+			document.getElementById('durationChooserModal' + calendarUniqueId).style.height = calendar.clientHeight + 'px';
+			document.getElementById('durationChooserModal' + calendarUniqueId).style.width = calendar.clientWidth + 'px';
 			document.getElementById('durationChooserModal' + calendarUniqueId).style.display = 'inline';
 		}
 
-		function saveClientDateDuration() {
+		function saveClientDateDuration () {
 			var duration = document.getElementById('durationInput' + calendarUniqueId).value;
 			endUserSelection[endUserSelection.length - 1].duration = duration;
 		}
-		//afterCalendarInit CALL swiftCal() range before instantiating the caledar
-		function preloadDatesFn(calendar, dates) {
+		// afterCalendarInit CALL swiftCal() range before instantiating the caledar
+		function preloadDatesFn (calendar, dates) {
 			if (dates) {
-				//Assign dates to datesSelectedArrayObjects.
+				// Assign dates to datesSelectedArrayObjects.
 				datesSelectedArrayObjects = dates;
 				for (var i = 0; i <= dates.length - 1; i++) {
-					//Hacky way to get the id with an interger as a first character:
+					// Hacky way to get the id with an interger as a first character:
 					var dateId = "[id='" + dates[i].day + "']";
-					//Make sure element exists in the calendar
-					//Query selector is used to search a specified calendar and not the dom in general:
+					// Make sure element exists in the calendar
+					// Query selector is used to search a specified calendar and not the dom in general:
 					if (calendar.querySelector(dateId) !== null) {
-						//Fill the tracking array:
+						// Fill the tracking array:
 						datesSelectedArray.push(dates[i].day);
 						calendar.querySelector(dateId).style.backgroundColor = '#fc3';
 						calendar.querySelector(dateId).classList.add('available');
 
-						//endUser option with durations!
+						// endUser option with durations!
 						if (endUser === true) {
 							attach(calendar.querySelector(dateId));
-							//end user duration Chooser, rest of code at top of file
+							// end user duration Chooser, rest of code at top of file
 							durationChooser();
 						}
 						if (displayTimeG === true) {
@@ -974,7 +953,7 @@ function SwiftCal() {
 						}
 						if (selectRange === true && calendar.querySelector(dateId) !== null && calendar.querySelector(dateId).classList.contains(
 							'filler') === false) {
-							//use preloaded dates directly blocked.push(preloadedDates[i].day);
+							// use preloaded dates directly blocked.push(preloadedDates[i].day);
 							calendar.querySelector(dateId).style.backgroundColor = '#333';
 							calendar.querySelector(dateId).classList.add('blocked');
 							calendar.querySelector(dateId).title = 'No availability on this day';
@@ -985,8 +964,6 @@ function SwiftCal() {
 						}
 					}
 				}
-			} else {
-				return;
 			}
 		}
 		if (numberOfMonthsToDisplay === undefined) {
@@ -999,7 +976,7 @@ function SwiftCal() {
 			var title = document.createElement('h4');
 			title.textContent = 'Select days of week to block:';
 			dayblockrow.appendChild(title);
-			dayblock.forEach(function(e, i) {
+			dayblock.forEach(function (e, i) {
 				var input = document.createElement('input');
 				input.setAttribute('type', 'checkbox');
 				input.classList.add('block');
@@ -1012,11 +989,11 @@ function SwiftCal() {
 				dayblockrow.appendChild(label);
 			});
 			calendar.appendChild(dayblockrow);
-			//FUNCTION FOR BLOCKING ALL DAYS OF A TYPE:
+			// FUNCTION FOR BLOCKING ALL DAYS OF A TYPE:
 			if (backend) {
 				var daysToBlock = document.getElementsByClassName('block');
-				for (i = 0; i < daysToBlock.length; i++) {
-					daysToBlock[i].addEventListener('click', function(e) {
+				for (let i = 0; i < daysToBlock.length; i++) {
+					daysToBlock[i].addEventListener('click', function (e) {
 						var blockTheseDays = document.querySelectorAll("[data-dayofweek='" + e.target.dataset.block + "']");
 						if (e.target.checked) {
 							for (i = 0; i < blockTheseDays.length; i++) {
@@ -1034,40 +1011,40 @@ function SwiftCal() {
 		var months = [];
 		var dateNow = new Date();
 		var monthNow = dateNow.getMonth();
-		var yearNow = dateNow.getFullYear();
+		// var yearNow = dateNow.getFullYear();
 		var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		//This basically just gives each day a unique index to make for easier
-		//comparison. Useless outside this context.
+		// This basically just gives each day a unique index to make for easier
+		// comparison. Useless outside this context.
 		var uniqueDayIndex = 0;
-		//make months
+		// make months
 		for (var i = 0; i < numberOfMonthsToDisplay; i++) {
 			months.push(document.createElement('div'));
 			calendar.appendChild(months[i]);
 			months[i].style.width = '15em';
 			months[i].style.backgroundColor = '#f15925';
 			months[i].classList.add('month');
-			//make month name
+			// make month name
 			var month = document.createElement('div');
 			month.textContent = monthNames[(monthNow + i) % 12];
 			month.classList.add('monthName');
 			months[i].appendChild(month);
-			//make week row
+			// make week row
 			var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 			var weekrow = document.createElement('div');
 			weekrow.classList.add('weekrow');
 			months[i].appendChild(weekrow);
-			days.forEach(function(e) {
+			days.forEach(function (e) {
 				var day = document.createElement('div');
 				weekrow.appendChild(day);
 				day.textContent = e;
 				day.classList.add('dayName', 'widthShapeDays');
 			});
-			//make days:
+			// make days:
 			var pegholes = [];
 			var weekrow1 = document.createElement('div');
 			months[i].appendChild(weekrow1);
 			weekrow1.classList.add('weekrow');
-			//Days and date information:
+			// Days and date information:
 			var yearCalc = new Date().addMonths(i).getFullYear();
 			var monthCalc = (monthNow + i) % 12;
 			var startDayOfMonth = new Date(yearCalc, monthCalc).getDay();
@@ -1077,22 +1054,22 @@ function SwiftCal() {
 			months[i].dataset.year = yearCalc;
 			months[i].dataset.month = monthCalc;
 			months[i].id = monthCalc + '-' + yearCalc;
-			//Day count:
+			// Day count:
 			var count = 1;
 			var dayofweek = 0;
-			//p accounts for "spilage" off days into incomplete weeks (6 therefore 42 slots, some empty).
-			for (p = 0; p <= 41; p++) {
+			// p accounts for "spilage" off days into incomplete weeks (6 therefore 42 slots, some empty).
+			for (let p = 0; p <= 41; p++) {
 				if (p < startDayOfMonth) {
 					pegholes.push(document.createElement('div'));
 					pegholes[p].classList.add('widthShape', 'filler');
 					weekrow1.appendChild(pegholes[p]);
 					pegholes[p].style.backgroundColor = 'white';
-					//pegholes[p].dataset.dayofweek = dayofweek;
+					// pegholes[p].dataset.dayofweek = dayofweek;
 					dayofweek++;
 				}
-				//New edit. Blocks past dates in month 0. Make it an option to select past dates?
-				//i referes to month (current month) the limit at the end is date now, plus the empty
-				//boxes at the start of the month, minus one to give today as available
+				// New edit. Blocks past dates in month 0. Make it an option to select past dates?
+				// i referes to month (current month) the limit at the end is date now, plus the empty
+				// boxes at the start of the month, minus one to give today as available
 				if (i === 0 && p >= startDayOfMonth && p < (datenow + startDayOfMonth - 1)) {
 					pegholes.push(document.createElement('div'));
 					pegholes[p].classList.add('widthShape', 'filler');
@@ -1107,7 +1084,7 @@ function SwiftCal() {
 					pegholes[p].dataset.dayindex = uniqueDayIndex;
 					weekrow1.appendChild(pegholes[p]);
 					pegholes[p].classList.add('widthShape', 'dayTime');
-					//doing
+					// doing
 					pegholes[p].id = yearCalc + '-' + monthCalc + '-' + count;
 					pegholes[p].addEventListener('click', dateOnClickEvents, false);
 					count++;
