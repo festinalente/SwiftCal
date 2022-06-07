@@ -233,6 +233,7 @@ function SwiftCal () {
 				? calendar.querySelector('.timeChooser').querySelector('.makeTimeRuleGlobal') : false;
 			if (makeTimeRuleGlobal) {
 				if (makeTimeRuleGlobal.checked === true) {
+					console.log(date);
 					bookDayOfWeekG(date, null);
 				}
 			}
@@ -966,6 +967,7 @@ function SwiftCal () {
 				}
 			}
 		}
+
 		if (numberOfMonthsToDisplay === undefined) {
 			numberOfMonthsToDisplay = 4;
 		}
@@ -1008,6 +1010,7 @@ function SwiftCal () {
 				}
 			}
 		}
+
 		var months = [];
 		var dateNow = new Date();
 		var monthNow = dateNow.getMonth();
@@ -1111,4 +1114,5 @@ function SwiftCal () {
 		}
 		return this;
 	};
+
 }
